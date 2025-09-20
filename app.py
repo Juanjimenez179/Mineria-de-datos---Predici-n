@@ -65,7 +65,7 @@ data_preparada.head()
 """# **Predicciones**"""
 
 #Hacemos la predicción con el Tree
-Y_pred = modelo.predict(data_preparada)
+Y_pred = model_Tree(data_preparada)
 print(Y_pred)
 
 data['Prediccion']=Y_pred
