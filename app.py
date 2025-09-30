@@ -48,7 +48,7 @@ datos = pd.DataFrame([[tipo_inmueble, departamento, estrato]],
 datos_encoded = pd.get_dummies(datos, columns=['Tipo Inmueble', 'Departamento'], drop_first=False)
 
 # Reindexar para que coincida con el modelo
-datos_encoded = datos_encoded.reindex(columns=model_Tree,model_Knn, model_NN, min_max_scaler, variables = pickle.load(open(filename, 'rb')), fill_value=0)
+datos_encoded = datos_encoded.reindex(columns=d, fill_value=0)
 # Predicción
 prediccion = model.predict(datos_encoded)
 # Mostrar resultado
