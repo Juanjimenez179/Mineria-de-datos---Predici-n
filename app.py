@@ -34,43 +34,22 @@ model_Tree,model_Knn, model_NN, min_max_scaler, variables = pickle.load(open(fil
 
 import streamlit as st
 
-st.title('Predicción de inversión en una tienda de videojuegos')
+st.title('Predicción del valor de arriendo de un inmueble')
 
-Edad = st.slider('Edad', min_value=14, max_value=52, value=20, step=1)
-videojuego = st.selectbox('Videojuego', ["'Mass Effect'","'Battlefield'", "'Fifa'","'KOA: Reckoning'","'Crysis'","'Sim City'","'Dead Space'","'F1'"])
-Plataforma = st.selectbox('Plataforma', ["'Play Station'", "'Xbox'","PC","Otros"])
-Sexo = st.selectbox('Sexo', ['Hombre', 'Mujer'])
-Consumidor_habitual = st.selectbox('Consumidor_habitual', ['True', 'False'])
+tipo_inmueble = st.selectbox('Tipo de Inmueble', ['Apartamento', 'Casa', 'Estudio'])
+departamento = st.selectbox('Departamento', ['Antioquia', 'Cundinamarca', 'Valle', 'Atlántico'])
+estrato = st.slider('Estrato', min_value=1, max_value=6, value=3)
 
 
 #Dataframe
-datos = [[Edad, videojuego,Plataforma,Sexo,Consumidor_habitual]]
-data = pd.DataFrame(datos, columns=['Edad', 'videojuego','Plataforma','Sexo','Consumidor_habitual']) #Dataframe con los mismos nombres de variables
+datos = pd.DataFrame([[tipo_inmueble, departamento, estrato]],
+                     columns=['Tipo Inmueble', 'Departamento', 'Estrato'])
+#One-hot encoding
+datos_encoded = pd.get_dummies(datos, columns=['Tipo Inmueble', 'Departamento'], drop_first=False)
 
-#Se realiza la preparación
-data_preparada=data.copy()
-
-#En despliegue drop_first= False
-data_preparada = pd.get_dummies(data_preparada, columns=['videojuego', 'Plataforma','Sexo', 'Consumidor_habitual'], drop_first=False, dtype=int)
-data_preparada.head()
-
-#Se adicionan las columnas faltantes
-data_preparada=data_preparada.reindex(columns=variables,fill_value=0)
-data_preparada.head()
-
-#Se normaliza la edad para predecir con Knn, Red
-#En los despliegues no se llama fit
-#data_preparada[['Edad']]= min_max_scaler.transform(data_preparada[['Edad']])
-#data_preparada.head()
-
-"""# **Predicciones**"""
-
-#Hacemos la predicción con el Tree
-Y_pred = model_Tree.predict(data_preparada)
-print(Y_pred)
-
-data['Prediccion']=Y_pred
-data.head()
-
-#Predicciones finales
-data
+# Reindexar para que coincida con el modelo
+datos_encoded = datos_encoded.reindex(columns=columnas_modelo, fill_value=0)
+# Predicción
+prediccion = model.predict(datos_encoded)
+# Mostrar resultado
+st.subheader(f'Valor estimado de arriendo: ${int(prediccion[0]):,}')
