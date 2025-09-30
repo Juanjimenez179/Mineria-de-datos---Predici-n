@@ -14,7 +14,7 @@ model_Tree, model_Knn, model_NN, min_max_scaler, variables = pickle.load(open(fi
 st.title('Predicción del valor de arriendo de un inmueble')
 
 tipo_inmueble = st.selectbox('Tipo de Inmueble', ['Apartamento', 'Casa', 'Estudio'])
-departamento = st.selectbox('Departamento', ['Antioquia', 'Cundinamarca', 'Valle', 'Atlántico'])
+departamento = st.selectbox('Departamento', ['Bogotá D.C.', 'Valle del Cauca'])
 estrato = st.slider('Estrato', min_value=1, max_value=6, value=3)
 
 # Crear DataFrame
